@@ -19,6 +19,7 @@ find_package(control_toolbox REQUIRED)
 find_package(moveit_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(tf2_eigen REQUIRED)
+find_package(trackjoint REQUIRED)
 find_package(trajectory_msgs REQUIRED)
 find_package(moveit_ros_planning REQUIRED)
 find_package(eigen3_cmake_module REQUIRED)
@@ -35,6 +36,7 @@ set(THIS_PACKAGE_INCLUDE_DEPENDS
   moveit_msgs
   geometry_msgs
   tf2_eigen
+  trackjoint
   trajectory_msgs
   moveit_ros_planning
 )

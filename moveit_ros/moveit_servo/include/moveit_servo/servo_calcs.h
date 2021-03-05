@@ -64,6 +64,9 @@
 #include <moveit_servo/status_codes.h>
 #include <moveit_servo/low_pass_filter.h>
 
+// TrackJoint, for motion smoothing
+#include "trackjoint/trajectory_generator.h"
+
 namespace moveit_servo
 {
 class ServoCalcs
@@ -348,5 +351,8 @@ protected:
   // input condition variable used for low latency mode
   std::condition_variable input_cv_;
   bool new_input_cmd_ = false;
+
+  // Trajectory smoother
+  std::unique_ptr<trackjoint::TrajectoryGenerator> traj_smoother_;
 };
 }  // namespace moveit_servo
