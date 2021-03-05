@@ -159,6 +159,23 @@ ServoCalcs::ServoCalcs(rclcpp::Node::SharedPtr node, const ServoParametersPtr& p
   empty_matrix.setZero();
   tf_moveit_to_ee_frame_ = empty_matrix;
   tf_moveit_to_robot_cmd_frame_ = empty_matrix;
+
+  // Initialize the trajectory smoother
+  std::vector<trackjoint::KinematicState> start_state(num_joints_);
+  std::vector<trackjoint::KinematicState> goal_joint_states(num_joints_);
+  constexpr double waypoint_position_tolerance = 1e-5;  // radians
+  constexpr bool use_streaming_mode = false;
+  limits_.reset(new std::vector<trackjoint::Limits>(num_joints_));
+  // Define vel/accel limits for each joint
+  for (size_t jt = 0; jt < num_joints_; ++jt)
+  {
+    auto joint = joint_model_group_->getActiveJointModels().at(jt);
+    auto bounds = joint->getVariableBounds(joint->getName());
+    limits_->at(jt).velocity_limit = bounds.max_velocity_;
+    limits_->at(jt).acceleration_limit = bounds.max_acceleration_;
+    limits_->at(jt).jerk_limit = DBL_MAX;  // MoveIt has no concept of jerk limits yet, so make it large
+  }
+  traj_smoother_.reset(new trackjoint::TrajectoryGenerator(num_joints_, 0.01, 1, 1, start_state, goal_joint_states, *limits_, waypoint_position_tolerance, use_streaming_mode));
 }
 
 ServoCalcs::~ServoCalcs()

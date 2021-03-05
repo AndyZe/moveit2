@@ -354,5 +354,7 @@ protected:
 
   // Trajectory smoother
   std::unique_ptr<trackjoint::TrajectoryGenerator> traj_smoother_;
+  // Parameters for the smoother
+  std::unique_ptr<std::vector<trackjoint::Limits>> limits_;
 };
 }  // namespace moveit_servo
