@@ -357,7 +357,7 @@ TEST_F(ServoCalcsTestFixture, TestEnforceVelLimits)
   servo_calcs_->prev_joint_velocity_ = desired_velocity;
 
   // Do the enforcing and check it
-  servo_calcs_->enforceVelLimits(desired_velocity);
+  servo_calcs_->enforceVelAccelLimits(desired_velocity);
   for (size_t i = 0; i < 7; ++i)
   {
     // We need to check vs radians-per-loop allowable rate (not rad/s)
@@ -367,7 +367,7 @@ TEST_F(ServoCalcsTestFixture, TestEnforceVelLimits)
   // Let's check the negative velocities too
   desired_velocity *= -1;
   servo_calcs_->prev_joint_velocity_ = desired_velocity;
-  servo_calcs_->enforceVelLimits(desired_velocity);
+  servo_calcs_->enforceVelAccelLimits(desired_velocity);
   for (size_t i = 0; i < 7; ++i)
   {
     // We need to check vs radians-per-loop allowable rate (not rad/s)

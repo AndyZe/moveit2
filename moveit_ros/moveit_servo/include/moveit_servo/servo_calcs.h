@@ -161,7 +161,7 @@ protected:
   void suddenHalt(trajectory_msgs::msg::JointTrajectory& joint_trajectory) const;
 
   /** \brief  Scale the delta theta to match joint velocity/acceleration limits */
-  void enforceVelLimits(Eigen::ArrayXd& delta_theta);
+  void enforceVelAccelLimits(Eigen::ArrayXd& delta_theta);
 
   /** \brief Avoid overshooting joint limits */
   bool enforcePositionLimits();

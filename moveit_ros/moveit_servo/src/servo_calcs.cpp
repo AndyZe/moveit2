@@ -549,7 +549,7 @@ bool ServoCalcs::internalServoUpdate(Eigen::ArrayXd& delta_theta,
   internal_joint_state_ = original_joint_state_;
 
   // Enforce SRDF Velocity, Acceleration limits
-  enforceVelLimits(delta_theta);
+  enforceVelAccelLimits(delta_theta);
 
   // Apply collision scaling
   double collision_scale = collision_velocity_scale_;
@@ -749,7 +749,7 @@ double ServoCalcs::velocityScalingFactorForSingularity(const Eigen::VectorXd& co
   return velocity_scale;
 }
 
-void ServoCalcs::enforceVelLimits(Eigen::ArrayXd& delta_theta)
+void ServoCalcs::enforceVelAccelLimits(Eigen::ArrayXd& delta_theta)
 {
   Eigen::ArrayXd velocity = delta_theta / parameters_->publish_period;
 
