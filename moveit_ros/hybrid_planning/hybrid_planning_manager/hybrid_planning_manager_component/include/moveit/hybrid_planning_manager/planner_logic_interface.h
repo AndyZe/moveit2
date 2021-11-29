@@ -48,7 +48,7 @@ namespace moveit::hybrid_planning
 // Describes the outcome of a reaction to an event in the hybrid planning architecture
 struct ReactionResult
 {
-  ReactionResult(const HybridPlanningEvent& planning_event, const std::string& error_msg, const int& error_code)
+  ReactionResult(const HybridPlanningEvent& planning_event, const std::string& error_msg, int error_code)
     : error_message(error_msg), error_code(error_code)
   {
     switch (planning_event)
@@ -81,7 +81,7 @@ struct ReactionResult
         event = "Undefined event";
     }
   };
-  ReactionResult(const std::string& event, const std::string& error_msg, const int& error_code)
+  ReactionResult(const std::string& event, const std::string& error_msg, int error_code)
     : event(event), error_message(error_msg), error_code(error_code){};
 
   // Event that triggered the reaction
