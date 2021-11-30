@@ -56,7 +56,7 @@ namespace moveit::hybrid_planning
 /**
  * Class HybridPlanningManager - ROS 2 component node that implements the hybrid planning manager.
  */
-class HybridPlanningManager : public std::enable_shared_from_this<HybridPlanningManager>
+class HybridPlanningManager
 {
 public:
   /** \brief Constructor */

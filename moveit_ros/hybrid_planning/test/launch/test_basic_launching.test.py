@@ -65,7 +65,7 @@ class MakeTestNode(Node):
     def wait_for_node(self, node_name, timeout=8.0):
         start = time.time()
         flag = False
-        print("Waiting for node...")
+        print("Waiting for node ({}) ...".format(node_name))
         while time.time() - start < timeout and not flag:
             flag = node_name in self.get_node_names()
             time.sleep(0.1)

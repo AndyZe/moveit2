@@ -109,7 +109,7 @@ public:
    * @param hybrid_planning_manager The hybrid planning manager instance to initialize this logic with.
    * @return true if initialization was successful
    */
-  virtual bool initialize(const std::shared_ptr<HybridPlanningManager>& hybrid_planning_manager) = 0;
+  virtual bool initialize(HybridPlanningManager* hybrid_planning_manager) = 0;
 
   /**
    * React to event defined in HybridPlanningEvent enum
@@ -127,6 +127,6 @@ public:
 
 protected:
   // The hybrid planning manager instance that runs this logic plugin
-  std::shared_ptr<HybridPlanningManager> hybrid_planning_manager_ = nullptr;
+  HybridPlanningManager* hybrid_planning_manager_ = nullptr;
 };
 }  // namespace moveit::hybrid_planning

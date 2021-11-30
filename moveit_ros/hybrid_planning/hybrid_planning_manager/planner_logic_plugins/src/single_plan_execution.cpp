@@ -41,7 +41,7 @@ const rclcpp::Logger LOGGER = rclcpp::get_logger("hybrid_planning_manager");
 
 namespace moveit::hybrid_planning
 {
-bool SinglePlanExecution::initialize(const std::shared_ptr<HybridPlanningManager>& hybrid_planning_manager)
+bool SinglePlanExecution::initialize(HybridPlanningManager* hybrid_planning_manager)
 {
   hybrid_planning_manager_ = hybrid_planning_manager;
   return true;
@@ -49,6 +49,7 @@ bool SinglePlanExecution::initialize(const std::shared_ptr<HybridPlanningManager
 
 ReactionResult SinglePlanExecution::react(const HybridPlanningEvent& event)
 {
+  assert(hybrid_planning_manager_ != nullptr);
   switch (event)
   {
     case HybridPlanningEvent::HYBRID_PLANNING_REQUEST_RECEIVED:

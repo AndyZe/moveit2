@@ -72,7 +72,7 @@ HybridPlanningManager::HybridPlanningManager(const rclcpp::NodeOptions& options)
   try
   {
     planner_logic_instance_ = planner_logic_plugin_loader_->createUniqueInstance(logic_plugin_name);
-    if (!planner_logic_instance_->initialize(shared_from_this()))
+    if (!planner_logic_instance_->initialize(this))
     {
       throw std::runtime_error("Unable to initialize planner logic plugin");
     }
