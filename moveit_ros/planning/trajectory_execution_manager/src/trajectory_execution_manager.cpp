@@ -114,16 +114,18 @@ void TrajectoryExecutionManager::initialize()
   catch (pluginlib::PluginlibException& ex)
   {
     RCLCPP_FATAL_STREAM(LOGGER, "Exception while creating controller manager plugin loader: " << ex.what());
-    return;
+    throw ex;
   }
 
   if (controller_manager_loader_)
   {
-    std::string controller;
-
-    if (!node_->get_parameter("moveit_controller_manager", controller))
+    // todo(tylerjw): handle parameters in a standard way
+    std::string controller = node_->get_parameter("moveit_controller_manager").as_string();
+    if (controller == "<undefined>")
     {
       const std::vector<std::string>& classes = controller_manager_loader_->getDeclaredClasses();
+
+      // This will never be true, there are now 2 plugins with that type
       if (classes.size() == 1)
       {
         controller = classes[0];
@@ -134,13 +136,19 @@ void TrajectoryExecutionManager::initialize()
       }
       else
       {
+        // Not a safe faulre!
+        controller = "";
         RCLCPP_FATAL(LOGGER, "Parameter '~moveit_controller_manager' not specified. This is needed to "
                              "identify the plugin to use for interacting with controllers. No paths can "
                              "be executed.");
+        throw std::runtime_error("Parameter '~moveit_controller_manager' not specified. This is needed to "
+                                 "identify the plugin to use for interacting with controllers. No paths can "
+                                 "be executed.");
       }
     }
 
     if (!controller.empty())
+    {
       try
       {
         // We make a node called moveit_simple_controller_manager so it's able to
@@ -155,7 +163,7 @@ void TrajectoryExecutionManager::initialize()
         for (const auto& param : all_params)
           controller_mgr_node_->set_parameter(rclcpp::Parameter(param.first, param.second));
 
-        controller_manager_ = controller_manager_loader_->createUniqueInstance(controller);
+        controller_manager_ = controller_manager_loader_->createUniqueInstance(std::string(controller));
         controller_manager_->initialize(controller_mgr_node_);
         private_executor_ = std::make_shared<rclcpp::executors::SingleThreadedExecutor>();
         private_executor_->add_node(controller_mgr_node_);
@@ -166,7 +174,9 @@ void TrajectoryExecutionManager::initialize()
       catch (pluginlib::PluginlibException& ex)
       {
         RCLCPP_FATAL_STREAM(LOGGER, "Exception while loading controller manager '" << controller << "': " << ex.what());
+        throw ex;
       }
+    }
   }
 
   // other configuration steps

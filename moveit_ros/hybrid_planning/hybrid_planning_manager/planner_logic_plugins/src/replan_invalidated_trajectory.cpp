@@ -43,6 +43,7 @@ namespace moveit::hybrid_planning
 {
 ReactionResult ReplanInvalidatedTrajectory::react(const std::string& event)
 {
+  assert(hybrid_planning_manager_ != nullptr);
   if (event == "collision_ahead")
   {
     if (!hybrid_planning_manager_->sendGlobalPlannerAction())  // Start global planning

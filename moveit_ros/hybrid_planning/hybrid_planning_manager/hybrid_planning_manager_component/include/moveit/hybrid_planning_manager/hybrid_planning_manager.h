@@ -38,6 +38,8 @@
 
 #pragma once
 
+#include <memory>
+
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp_action/rclcpp_action.hpp>
 
@@ -54,26 +56,19 @@ namespace moveit::hybrid_planning
 /**
  * Class HybridPlanningManager - ROS 2 component node that implements the hybrid planning manager.
  */
-class HybridPlanningManager : public rclcpp::Node
+class HybridPlanningManager
 {
 public:
   /** \brief Constructor */
   HybridPlanningManager(const rclcpp::NodeOptions& options);
 
-  /**
-   * Allows creation of a smart pointer that references to instances of this object
-   * @return shared pointer of the HybridPlanningManager instance that called the function
-   */
-  std::shared_ptr<HybridPlanningManager> shared_from_this()
+  // This function is required to make this class a valid NodeClass
+  // see https://docs.ros2.org/foxy/api/rclcpp_components/register__node__macro_8hpp.html
+  // Skip linting due to unconventional function naming
+  rclcpp::node_interfaces::NodeBaseInterface::SharedPtr get_node_base_interface()  // NOLINT
   {
-    return std::static_pointer_cast<HybridPlanningManager>(Node::shared_from_this());
+    return node_->get_node_base_interface();  // NOLINT
   }
-
-  /**
-   * Load and initialized planner logic plugin and ROS 2 action and topic interfaces
-   * @return Initialization successfull yes/no
-   */
-  bool initialize();
 
   /**
    * Hybrid planning goal callback for hybrid planning request server
@@ -101,17 +96,14 @@ public:
   void sendHybridPlanningResponse(bool success);
 
 private:
+  // ROS node
+  rclcpp::Node::SharedPtr node_;
+
   // Planner logic plugin loader
   std::unique_ptr<pluginlib::ClassLoader<PlannerLogicInterface>> planner_logic_plugin_loader_;
 
   // Planner logic instance to implement reactive behavior
   std::shared_ptr<PlannerLogicInterface> planner_logic_instance_;
-
-  // Timer to trigger events periodically
-  rclcpp::TimerBase::SharedPtr timer_;
-
-  // Flag that indicates whether the manager is initialized
-  bool initialized_;
 
   // Shared hybrid planning goal handle
   std::shared_ptr<rclcpp_action::ServerGoalHandle<moveit_msgs::action::HybridPlanner>> hybrid_planning_goal_handle_;
