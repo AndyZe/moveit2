@@ -1109,7 +1109,7 @@ int numsolutions = 0;
 for(int ij3 = 0; ij3 < numroots; ++ij3)
 {
 IkReal htj3 = zeror[ij3];
-tempj3array[0]=((2.0)*(atan(htj3)));
+tempj3array[0]=((2.0)*(atan2(htj3)));
 for(int kj3 = 0; kj3 < 1; ++kj3)
 {
 j3array[numsolutions] = tempj3array[kj3];
@@ -3478,7 +3478,7 @@ int numsolutions = 0;
 for(int ij5 = 0; ij5 < numroots; ++ij5)
 {
 IkReal htj5 = zeror[ij5];
-tempj5array[0]=((2.0)*(atan(htj5)));
+tempj5array[0]=((2.0)*(atan2(htj5)));
 for(int kj5 = 0; kj5 < 1; ++kj5)
 {
 j5array[numsolutions] = tempj5array[kj5];
@@ -4675,7 +4675,7 @@ int numsolutions = 0;
 for(int ij5 = 0; ij5 < numroots; ++ij5)
 {
 IkReal htj5 = zeror[ij5];
-tempj5array[0]=((2.0)*(atan(htj5)));
+tempj5array[0]=((2.0)*(atan2(htj5)));
 for(int kj5 = 0; kj5 < 1; ++kj5)
 {
 j5array[numsolutions] = tempj5array[kj5];
