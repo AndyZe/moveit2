@@ -139,12 +139,37 @@ moveit::core::MoveItErrorCode PlanningRequestAdapterChain::adaptAndPlan(
       return callPlannerInterfaceSolve(planner, scene, req, res);
     };
 
+    // The adapters pass `res` recursively, and abort if it ever shows a failure.
+    res.error_code_.val = moveit::core::MoveItErrorCode::SUCCESS;
+
     for (int i = adapters_.size() - 1; i >= 0; --i)
     {
+      // Always call the first adapter
+      if (i == adapters_.size() - 1)
+      {
+        fn = [&adapter = *adapters_[i], fn, &added_path_index = added_path_index_each[i]](
+                 const planning_scene::PlanningSceneConstPtr& scene, const planning_interface::MotionPlanRequest& req,
+                 planning_interface::MotionPlanResponse& res) {
+          RCLCPP_ERROR_STREAM(LOGGER, "Running adapter " << adapter.getDescription());
+          return callAdapter(adapter, fn, scene, req, res, added_path_index);
+        };
+        continue;
+      }
+
+      // Subsequent adapters are aborted if any previous adapter fails
       fn = [&adapter = *adapters_[i], fn, &added_path_index = added_path_index_each[i]](
                const planning_scene::PlanningSceneConstPtr& scene, const planning_interface::MotionPlanRequest& req,
                planning_interface::MotionPlanResponse& res) {
-        // Abort pipeline and return in case of failure
+        // If a previous adapter returned an error, there's no need to continue.
+        if (res.error_code_.val != moveit::core::MoveItErrorCode::SUCCESS)
+        {
+          RCLCPP_ERROR_STREAM(LOGGER, "Skipping planning request adapter "
+                                          << adapter.getDescription() << " due to previous failure: "
+                                          << moveit::core::error_code_to_string(res.error_code_));
+          return moveit::core::MoveItErrorCode(res.error_code_);
+        }
+
+        RCLCPP_ERROR_STREAM(LOGGER, "Running adapter " << adapter.getDescription());
         return callAdapter(adapter, fn, scene, req, res, added_path_index);
       };
     }
