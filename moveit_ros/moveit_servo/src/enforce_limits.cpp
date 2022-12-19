@@ -54,7 +54,7 @@ double getVelocityScalingFactor(const moveit::core::JointModelGroup* joint_model
   for (const moveit::core::JointModel* joint : joint_model_group->getActiveJointModels())
   {
     const auto& bounds = joint->getVariableBounds(joint->getName());
-    if (bounds.velocity_bounded_ && velocity(joint_delta_index) != 0.0)
+    if (velocity(joint_delta_index) != 0.0)
     {
       const double unbounded_velocity = velocity(joint_delta_index);
       // Clamp each joint velocity to a joint specific [min_velocity, max_velocity] range.

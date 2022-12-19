@@ -420,15 +420,11 @@ TEST(time_optimal_trajectory_generation, testPluginAPI)
     {
       ASSERT_EQ(test_bounds.at(0)->at(bound_idx).max_velocity_, original_bounds.at(0)->at(bound_idx).max_velocity_);
       ASSERT_EQ(test_bounds.at(0)->at(bound_idx).min_velocity_, original_bounds.at(0)->at(bound_idx).min_velocity_);
-      ASSERT_EQ(test_bounds.at(0)->at(bound_idx).velocity_bounded_,
-                original_bounds.at(0)->at(bound_idx).velocity_bounded_);
 
       ASSERT_EQ(test_bounds.at(0)->at(bound_idx).max_acceleration_,
                 original_bounds.at(0)->at(bound_idx).max_acceleration_);
       ASSERT_EQ(test_bounds.at(0)->at(bound_idx).min_acceleration_,
                 original_bounds.at(0)->at(bound_idx).min_acceleration_);
-      ASSERT_EQ(test_bounds.at(0)->at(bound_idx).acceleration_bounded_,
-                original_bounds.at(0)->at(bound_idx).acceleration_bounded_);
     }
     ASSERT_EQ(test_trajectory.getWayPointDurationFromPrevious(1), trajectory.getWayPointDurationFromPrevious(1));
 

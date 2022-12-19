@@ -57,11 +57,8 @@ void checkVelocityLimits(const moveit::core::JointModelGroup* joint_model_group,
   {
     const auto& bounds = joint->getVariableBounds(joint->getName());
 
-    if (bounds.velocity_bounded_)
-    {
-      EXPECT_GE(velocity(joint_index), bounds.min_velocity_) << "Joint " << joint_index << " violates velocity limit";
-      EXPECT_LE(velocity(joint_index), bounds.max_velocity_) << "Joint " << joint_index << " violates velocity limit";
-    }
+    EXPECT_GE(velocity(joint_index), bounds.min_velocity_) << "Joint " << joint_index << " violates velocity limit";
+    EXPECT_LE(velocity(joint_index), bounds.max_velocity_) << "Joint " << joint_index << " violates velocity limit";
     ++joint_index;
   }
 }

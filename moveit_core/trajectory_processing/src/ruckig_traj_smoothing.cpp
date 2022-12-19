@@ -166,30 +166,10 @@ bool RuckigSmoothing::getRobotModelBounds(const double max_velocity_scaling_fact
     const moveit::core::VariableBounds& bounds = rmodel.getVariableBounds(vars.at(i));
 
     // This assumes min/max bounds are symmetric
-    if (bounds.velocity_bounded_)
-    {
-      ruckig_input.max_velocity.at(i) = max_velocity_scaling_factor * bounds.max_velocity_;
-    }
-    else
-    {
-      RCLCPP_WARN_STREAM_ONCE(LOGGER,
-                              "Joint velocity limits are not defined. Using the default "
-                                  << DEFAULT_MAX_VELOCITY
-                                  << " rad/s. You can define velocity limits in the URDF or joint_limits.yaml.");
-      ruckig_input.max_velocity.at(i) = max_velocity_scaling_factor * DEFAULT_MAX_VELOCITY;
-    }
-    if (bounds.acceleration_bounded_)
-    {
-      ruckig_input.max_acceleration.at(i) = max_acceleration_scaling_factor * bounds.max_acceleration_;
-    }
-    else
-    {
-      RCLCPP_WARN_STREAM_ONCE(LOGGER,
-                              "Joint acceleration limits are not defined. Using the default "
-                                  << DEFAULT_MAX_ACCELERATION
-                                  << " rad/s^2. You can define acceleration limits in the URDF or joint_limits.yaml.");
-      ruckig_input.max_acceleration.at(i) = max_acceleration_scaling_factor * DEFAULT_MAX_ACCELERATION;
-    }
+    ruckig_input.max_velocity.at(i) = max_velocity_scaling_factor * bounds.max_velocity_;
+    ruckig_input.max_acceleration.at(i) = max_acceleration_scaling_factor * bounds.max_acceleration_;
+
+    // Jerk bounds are optional
     ruckig_input.max_jerk.at(i) = bounds.jerk_bounded_ ? bounds.max_jerk_ : DEFAULT_MAX_JERK;
     if (bounds.jerk_bounded_)
     {

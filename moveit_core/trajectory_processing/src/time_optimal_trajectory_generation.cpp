@@ -924,44 +924,23 @@ bool TimeOptimalTrajectoryGeneration::computeTimeStamps(robot_trajectory::RobotT
     const moveit::core::VariableBounds& bounds = rmodel.getVariableBounds(vars[j]);
 
     // Limits need to be non-zero, otherwise we never exit
-    max_velocity[j] = 1.0;
-    if (bounds.velocity_bounded_)
+    if (bounds.max_velocity_ <= 0.0)
     {
-      if (bounds.max_velocity_ <= 0.0)
-      {
-        RCLCPP_ERROR(LOGGER, "Invalid max_velocity %f specified for '%s', must be greater than 0.0",
-                     bounds.max_velocity_, vars[j].c_str());
-        return false;
-      }
-      max_velocity[j] =
-          std::min(std::fabs(bounds.max_velocity_), std::fabs(bounds.min_velocity_)) * velocity_scaling_factor;
+      RCLCPP_ERROR(LOGGER, "Invalid max_velocity %f specified for '%s', must be greater than 0.0", bounds.max_velocity_,
+                   vars[j].c_str());
+      return false;
     }
-    else
-    {
-      RCLCPP_WARN_STREAM_ONCE(
-          LOGGER, "Joint velocity limits are not defined. Using the default "
-                      << max_velocity[j] << " rad/s. You can define velocity limits in the URDF or joint_limits.yaml.");
-    }
+    max_velocity[j] =
+        std::min(std::fabs(bounds.max_velocity_), std::fabs(bounds.min_velocity_)) * velocity_scaling_factor;
 
-    max_acceleration[j] = 1.0;
-    if (bounds.acceleration_bounded_)
+    if (bounds.max_acceleration_ < 0.0)
     {
-      if (bounds.max_acceleration_ < 0.0)
-      {
-        RCLCPP_ERROR(LOGGER, "Invalid max_acceleration %f specified for '%s', must be greater than 0.0",
-                     bounds.max_acceleration_, vars[j].c_str());
-        return false;
-      }
-      max_acceleration[j] = std::min(std::fabs(bounds.max_acceleration_), std::fabs(bounds.min_acceleration_)) *
-                            acceleration_scaling_factor;
+      RCLCPP_ERROR(LOGGER, "Invalid max_acceleration %f specified for '%s', must be greater than 0.0",
+                   bounds.max_acceleration_, vars[j].c_str());
+      return false;
     }
-    else
-    {
-      RCLCPP_WARN_STREAM_ONCE(LOGGER,
-                              "Joint acceleration limits are not defined. Using the default "
-                                  << max_acceleration[j]
-                                  << " rad/s^2. You can define acceleration limits in the URDF or joint_limits.yaml.");
-    }
+    max_acceleration[j] = std::min(std::fabs(bounds.max_acceleration_), std::fabs(bounds.min_acceleration_)) *
+                          acceleration_scaling_factor;
   }
 
   return doTimeParameterizationCalculations(trajectory, max_velocity, max_acceleration);
@@ -1001,7 +980,7 @@ bool TimeOptimalTrajectoryGeneration::computeTimeStamps(
       set_velocity_limit = true;
     }
 
-    if (bounds.velocity_bounded_ && !set_velocity_limit)
+    if (!set_velocity_limit)
     {
       // Set the default velocity limit, from robot model
       if (bounds.max_velocity_ < 0.0)
@@ -1032,7 +1011,7 @@ bool TimeOptimalTrajectoryGeneration::computeTimeStamps(
       set_acceleration_limit = true;
     }
 
-    if (bounds.acceleration_bounded_ && !set_acceleration_limit)
+    if (!set_acceleration_limit)
     {
       // Set the default acceleration limit, from robot model
       if (bounds.max_acceleration_ < 0.0)
