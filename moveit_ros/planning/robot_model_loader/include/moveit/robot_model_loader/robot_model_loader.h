@@ -127,7 +127,7 @@ public:
                                  kinematics_plugin_loader::KinematicsPluginLoaderPtr());
 
 private:
-  void configure(const Options& opt);
+  bool configure(const Options& opt);
 
   moveit::core::RobotModelPtr model_;
   rdf_loader::RDFLoaderPtr rdf_loader_;
