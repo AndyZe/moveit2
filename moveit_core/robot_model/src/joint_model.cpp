@@ -122,7 +122,7 @@ bool JointModel::satisfiesVelocityBounds(const double* values, const Bounds& oth
     {
       continue;
     }
-    if (other_bounds[i].max_velocity_ + margin < values[i])
+    if (other_bounds[i].max_velocity_ < values[i])
     {
       return false;
     }
