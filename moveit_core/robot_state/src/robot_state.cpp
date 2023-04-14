@@ -874,23 +874,23 @@ const LinkModel* RobotState::getRigidlyConnectedParentLinkModel(const std::strin
   return getRobotModel()->getRigidlyConnectedParentLinkModel(link);
 }
 
-bool RobotState::satisfiesBounds(double margin) const
+bool RobotState::satisfiesBounds() const
 {
   const std::vector<const JointModel*>& jm = robot_model_->getActiveJointModels();
   for (const JointModel* joint : jm)
   {
-    if (!satisfiesBounds(joint, margin))
+    if (!satisfiesBounds(joint))
       return false;
   }
   return true;
 }
 
-bool RobotState::satisfiesBounds(const JointModelGroup* group, double margin) const
+bool RobotState::satisfiesBounds(const JointModelGroup* group) const
 {
   const std::vector<const JointModel*>& jm = group->getActiveJointModels();
   for (const JointModel* joint : jm)
   {
-    if (!satisfiesBounds(joint, margin))
+    if (!satisfiesBounds(joint))
       return false;
   }
   return true;
