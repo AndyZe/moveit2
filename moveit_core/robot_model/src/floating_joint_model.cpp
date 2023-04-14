@@ -164,13 +164,13 @@ void FloatingJointModel::interpolate(const double* from, const double* to, const
   }
 }
 
-bool FloatingJointModel::satisfiesPositionBounds(const double* values, const Bounds& bounds, double margin) const
+bool FloatingJointModel::satisfiesPositionBounds(const double* values, const Bounds& bounds) const
 {
-  if (values[0] < bounds[0].min_position_ - margin || values[0] > bounds[0].max_position_ + margin)
+  if (values[0] < bounds[0].min_position_ || values[0] > bounds[0].max_position_)
     return false;
-  if (values[1] < bounds[1].min_position_ - margin || values[1] > bounds[1].max_position_ + margin)
+  if (values[1] < bounds[1].min_position_ || values[1] > bounds[1].max_position_)
     return false;
-  if (values[2] < bounds[2].min_position_ - margin || values[2] > bounds[2].max_position_ + margin)
+  if (values[2] < bounds[2].min_position_ || values[2] > bounds[2].max_position_)
     return false;
   double norm_sqr = values[3] * values[3] + values[4] * values[4] + values[5] * values[5] + values[6] * values[6];
   return fabs(norm_sqr - 1.0) <= std::numeric_limits<float>::epsilon() * 10.0;
