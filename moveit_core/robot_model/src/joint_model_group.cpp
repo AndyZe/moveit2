@@ -408,14 +408,13 @@ void JointModelGroup::getVariableRandomPositionsNearBy(random_numbers::RandomNum
   updateMimicJoints(values);
 }
 
-bool JointModelGroup::satisfiesPositionBounds(const double* state, const JointBoundsVector& active_joint_bounds,
-                                              double margin) const
+bool JointModelGroup::satisfiesPositionBounds(const double* state, const JointBoundsVector& active_joint_bounds) const
 {
   assert(active_joint_bounds.size() == active_joint_model_vector_.size());
   for (std::size_t i = 0; i < active_joint_model_vector_.size(); ++i)
   {
     if (!active_joint_model_vector_[i]->satisfiesPositionBounds(state + active_joint_model_start_index_[i],
-                                                                *active_joint_bounds[i], margin))
+                                                                *active_joint_bounds[i]))
       return false;
   }
   return true;
