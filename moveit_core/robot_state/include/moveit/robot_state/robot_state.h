@@ -1545,19 +1545,19 @@ public:
     joint->enforceVelocityBounds(velocity_ + joint->getFirstVariableIndex());
   }
 
-  bool satisfiesBounds(double margin = 0.0) const;
-  bool satisfiesBounds(const JointModelGroup* joint_group, double margin = 0.0) const;
-  bool satisfiesBounds(const JointModel* joint, double margin = 0.0) const
+  bool satisfiesBounds() const;
+  bool satisfiesBounds(const JointModelGroup* joint_group) const;
+  bool satisfiesBounds(const JointModel* joint) const
   {
-    return satisfiesPositionBounds(joint, margin) && (!has_velocity_ || satisfiesVelocityBounds(joint, margin));
+    return satisfiesPositionBounds(joint) && (!has_velocity_ || satisfiesVelocityBounds(joint));
   }
-  bool satisfiesPositionBounds(const JointModel* joint, double margin = 0.0) const
+  bool satisfiesPositionBounds(const JointModel* joint) const
   {
-    return joint->satisfiesPositionBounds(getJointPositions(joint), margin);
+    return joint->satisfiesPositionBounds(getJointPositions(joint));
   }
-  bool satisfiesVelocityBounds(const JointModel* joint, double margin = 0.0) const
+  bool satisfiesVelocityBounds(const JointModel* joint) const
   {
-    return joint->satisfiesVelocityBounds(getJointVelocities(joint), margin);
+    return joint->satisfiesVelocityBounds(getJointVelocities(joint));
   }
 
   /** \brief Get the minimm distance from this state to the bounds.
