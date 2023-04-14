@@ -71,8 +71,7 @@ bool FixedJointModel::enforcePositionBounds(double* /*values*/, const Bounds& /*
   return false;
 }
 
-bool FixedJointModel::satisfiesPositionBounds(const double* /*values*/, const Bounds& /*bounds*/,
-                                              double /*margin*/) const
+bool FixedJointModel::satisfiesPositionBounds(const double* /*values*/, const Bounds& /*bounds*/) const
 {
   return true;
 }

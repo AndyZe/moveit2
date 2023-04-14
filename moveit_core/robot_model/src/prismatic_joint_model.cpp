@@ -77,9 +77,9 @@ void PrismaticJointModel::getVariableDefaultPositions(double* values, const Boun
   }
 }
 
-bool PrismaticJointModel::satisfiesPositionBounds(const double* values, const Bounds& bounds, double margin) const
+bool PrismaticJointModel::satisfiesPositionBounds(const double* values, const Bounds& bounds) const
 {
-  return !(values[0] < bounds[0].min_position_ - margin || values[0] > bounds[0].max_position_ + margin);
+  return !(values[0] < bounds[0].min_position_ || values[0] > bounds[0].max_position_);
 }
 
 void PrismaticJointModel::getVariableRandomPositions(random_numbers::RandomNumberGenerator& rng, double* values,

@@ -114,7 +114,7 @@ bool JointModel::enforceVelocityBounds(double* values, const Bounds& other_bound
   return change;
 }
 
-bool JointModel::satisfiesVelocityBounds(const double* values, const Bounds& other_bounds, double margin) const
+bool JointModel::satisfiesVelocityBounds(const double* values, const Bounds& other_bounds) const
 {
   for (std::size_t i = 0; i < other_bounds.size(); ++i)
   {
@@ -126,7 +126,7 @@ bool JointModel::satisfiesVelocityBounds(const double* values, const Bounds& oth
     {
       return false;
     }
-    else if (other_bounds[i].min_velocity_ - margin > values[i])
+    else if (other_bounds[i].min_velocity_ > values[i])
     {
       return false;
     }
@@ -134,7 +134,7 @@ bool JointModel::satisfiesVelocityBounds(const double* values, const Bounds& oth
   return true;
 }
 
-bool JointModel::satisfiesAccelerationBounds(const double* values, const Bounds& other_bounds, double margin) const
+bool JointModel::satisfiesAccelerationBounds(const double* values, const Bounds& other_bounds) const
 {
   for (std::size_t i = 0; i < other_bounds.size(); ++i)
   {
@@ -142,15 +142,15 @@ bool JointModel::satisfiesAccelerationBounds(const double* values, const Bounds&
     {
       continue;
     }
-    if (other_bounds[i].max_acceleration_ + margin < values[i])
+    if (other_bounds[i].max_acceleration_ < values[i])
       return false;
-    else if (other_bounds[i].min_acceleration_ - margin > values[i])
+    else if (other_bounds[i].min_acceleration_ > values[i])
       return false;
   }
   return true;
 }
 
-bool JointModel::satisfiesJerkBounds(const double* values, const Bounds& other_bounds, double margin) const
+bool JointModel::satisfiesJerkBounds(const double* values, const Bounds& other_bounds) const
 {
   for (std::size_t i = 0; i < other_bounds.size(); ++i)
   {
@@ -158,9 +158,9 @@ bool JointModel::satisfiesJerkBounds(const double* values, const Bounds& other_b
     {
       continue;
     }
-    if (other_bounds[i].max_jerk_ + margin < values[i])
+    if (other_bounds[i].max_jerk_ < values[i])
       return false;
-    else if (other_bounds[i].min_jerk_ - margin > values[i])
+    else if (other_bounds[i].min_jerk_ > values[i])
       return false;
   }
   return true;
