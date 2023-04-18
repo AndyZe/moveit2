@@ -133,7 +133,7 @@ public:
     {
       if (!start_state.satisfiesBounds(jmodel))
       {
-        if (start_state.satisfiesBounds(jmodel))
+        if (start_state.satisfiesBounds(jmodel, bounds_dist_))
         {
           if (!prefix_state)
             prefix_state = std::make_shared<moveit::core::RobotState>(start_state);

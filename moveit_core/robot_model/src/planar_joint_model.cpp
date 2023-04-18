@@ -296,11 +296,11 @@ double PlanarJointModel::distance(const double* values1, const double* values2) 
   return 0.0;
 }
 
-bool PlanarJointModel::satisfiesPositionBounds(const double* values, const Bounds& bounds) const
+bool PlanarJointModel::satisfiesPositionBounds(const double* values, const Bounds& bounds, double margin) const
 {
   for (unsigned int i = 0; i < 3; ++i)
   {
-    if (values[i] < bounds[i].min_position_ || values[i] > bounds[i].max_position_)
+    if (values[i] < bounds[i].min_position_ + margin || values[i] > bounds[i].max_position_ - margin)
       return false;
   }
   return true;

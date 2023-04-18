@@ -389,11 +389,12 @@ public:
   }
 
   bool enforcePositionBounds(double* state, const JointBoundsVector& active_joint_bounds) const;
-  bool satisfiesPositionBounds(const double* state) const
+  bool satisfiesPositionBounds(const double* state, double margin = 0.0) const
   {
-    return satisfiesPositionBounds(state, active_joint_models_bounds_);
+    return satisfiesPositionBounds(state, active_joint_models_bounds_, margin);
   }
-  bool satisfiesPositionBounds(const double* state, const JointBoundsVector& active_joint_bounds) const;
+  bool satisfiesPositionBounds(const double* state, const JointBoundsVector& active_joint_bounds,
+                               double margin = 0.0) const;
 
   double getMaximumExtent() const
   {

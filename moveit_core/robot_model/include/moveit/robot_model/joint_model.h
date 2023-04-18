@@ -277,14 +277,14 @@ public:
       @{ */
 
   /** \brief Check if the set of values for the variables of this joint are within bounds. */
-  bool satisfiesPositionBounds(const double* values) const
+  bool satisfiesPositionBounds(const double* values, double margin = 0.0) const
   {
-    return satisfiesPositionBounds(values, variable_bounds_);
+    return satisfiesPositionBounds(values, variable_bounds_, margin);
   }
 
-  /** \brief Check if the set of position values for the variables of this joint are within bounds.
+  /** \brief Check if the set of position values for the variables of this joint are within bounds, up to some margin.
    */
-  virtual bool satisfiesPositionBounds(const double* values, const Bounds& other_bounds) const = 0;
+  virtual bool satisfiesPositionBounds(const double* values, const Bounds& other_bounds, double margin) const = 0;
 
   /** \brief Force the specified values to be inside bounds and normalized. Quaternions are normalized, continuous
      revolute joints are made between -Pi and Pi.
@@ -308,13 +308,13 @@ public:
   }
 
   /** \brief Check if the set of velocities for the variables of this joint are within bounds. */
-  bool satisfiesVelocityBounds(const double* values) const
+  bool satisfiesVelocityBounds(const double* values, double margin = 0.0) const
   {
-    return satisfiesVelocityBounds(values, variable_bounds_);
+    return satisfiesVelocityBounds(values, variable_bounds_, margin);
   }
 
-  /** \brief Check if the set of velocities for the variables of this joint are within bounds. */
-  virtual bool satisfiesVelocityBounds(const double* values, const Bounds& other_bounds) const;
+  /** \brief Check if the set of velocities for the variables of this joint are within bounds, up to some margin. */
+  virtual bool satisfiesVelocityBounds(const double* values, const Bounds& other_bounds, double margin) const;
 
   /** \brief Force the specified velocities to be within bounds. Return true if changes were made. */
   bool enforceVelocityBounds(double* values) const
@@ -326,22 +326,22 @@ public:
   virtual bool enforceVelocityBounds(double* values, const Bounds& other_bounds) const;
 
   /** \brief Check if the set of accelerations for the variables of this joint are within bounds. */
-  bool satisfiesAccelerationBounds(const double* values) const
+  bool satisfiesAccelerationBounds(const double* values, double margin = 0.0) const
   {
-    return satisfiesAccelerationBounds(values, variable_bounds_);
+    return satisfiesAccelerationBounds(values, variable_bounds_, margin);
   }
 
-  /** \brief Check if the set of accelerations for the variables of this joint are within bounds. */
-  virtual bool satisfiesAccelerationBounds(const double* values, const Bounds& other_bounds) const;
+  /** \brief Check if the set of accelerations for the variables of this joint are within bounds, up to some margin. */
+  virtual bool satisfiesAccelerationBounds(const double* values, const Bounds& other_bounds, double margin) const;
 
   /** \brief Check if the set of jerks for the variables of this joint are within bounds. */
-  bool satisfiesJerkBounds(const double* values) const
+  bool satisfiesJerkBounds(const double* values, double margin = 0.0) const
   {
-    return satisfiesJerkBounds(values, variable_bounds_);
+    return satisfiesJerkBounds(values, variable_bounds_, margin);
   }
 
-  /** \brief Check if the set of jerks for the variables of this joint are within bounds. */
-  virtual bool satisfiesJerkBounds(const double* values, const Bounds& other_bounds) const;
+  /** \brief Check if the set of jerks for the variables of this joint are within bounds, up to some margin. */
+  virtual bool satisfiesJerkBounds(const double* values, const Bounds& other_bounds, double margin) const;
 
   /** \brief Get the bounds for a variable. Throw an exception if the variable was not found */
   const VariableBounds& getVariableBounds(const std::string& variable) const;
