@@ -1194,7 +1194,7 @@ void PlanningScene::decoupleParent()
   {
     ObjectTypeMap kc;
     parent_->getKnownObjectTypes(kc);
-    object_types_ = std::make_unique<ObjectTypeMap>(kc);
+    object_types_ = ObjectTypeMap(kc);
   }
   else
   {
@@ -1202,8 +1202,8 @@ void PlanningScene::decoupleParent()
     parent_->getKnownObjectTypes(kc);
     for (ObjectTypeMap::const_iterator it = kc.begin(); it != kc.end(); ++it)
     {
-      if (object_types_->find(it->first) == object_types_->end())
-        (*object_types_)[it->first] = it->second;
+      if (object_types_.find(it->first) == object_types_.end())
+        object_types_[it->first] = it->second;
     }
   }
 
@@ -1917,7 +1917,7 @@ bool PlanningScene::hasObjectType(const std::string& object_id) const
 {
   if (object_types_)
   {
-    if (object_types_->find(object_id) != object_types_->end())
+    if (object_types_.find(object_id) != object_types_.end())
       return true;
   }
   if (parent_)
@@ -1929,8 +1929,8 @@ const object_recognition_msgs::msg::ObjectType& PlanningScene::getObjectType(con
 {
   if (object_types_)
   {
-    ObjectTypeMap::const_iterator it = object_types_->find(object_id);
-    if (it != object_types_->end())
+    ObjectTypeMap::const_iterator it = object_types_.find(object_id);
+    if (it != object_types_.end())
       return it->second;
   }
   if (parent_)
@@ -1942,14 +1942,14 @@ const object_recognition_msgs::msg::ObjectType& PlanningScene::getObjectType(con
 void PlanningScene::setObjectType(const std::string& object_id, const object_recognition_msgs::msg::ObjectType& type)
 {
   if (!object_types_)
-    object_types_ = std::make_unique<ObjectTypeMap>();
-  (*object_types_)[object_id] = type;
+    object_types_ = ObjectTypeMap();
+  object_types_[object_id] = type;
 }
 
 void PlanningScene::removeObjectType(const std::string& object_id)
 {
   if (object_types_)
-    object_types_->erase(object_id);
+    object_types_.erase(object_id);
 }
 
 void PlanningScene::getKnownObjectTypes(ObjectTypeMap& kc) const
@@ -1959,7 +1959,7 @@ void PlanningScene::getKnownObjectTypes(ObjectTypeMap& kc) const
     parent_->getKnownObjectTypes(kc);
   if (object_types_)
   {
-    for (ObjectTypeMap::const_iterator it = object_types_->begin(); it != object_types_->end(); ++it)
+    for (ObjectTypeMap::const_iterator it = object_types_.begin(); it != object_types_.end(); ++it)
       kc[it->first] = it->second;
   }
 }

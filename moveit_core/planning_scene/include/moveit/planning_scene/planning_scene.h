@@ -1032,6 +1032,6 @@ private:
   std::unique_ptr<ObjectColorMap> object_colors_;
 
   // a map of object types
-  std::unique_ptr<ObjectTypeMap> object_types_;
+  std::optional<ObjectTypeMap> object_types_;
 };
 }  // namespace planning_scene
